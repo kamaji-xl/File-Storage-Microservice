@@ -49,9 +49,10 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 	- If you are on mac or Linux then you can ignore this.  
 
 
-> [!note] If you have already installed docker desktop before WSL. 
+> [!note] 
+> If you have already installed docker desktop before WSL. 
 > - **DO NOT INSTALL WSL WITH** `wsl --install` 
-> - Instead use `wsl --list --verbose` to get a list of available distros.
+> - Instead, use `wsl --list --verbose` to get a list of available distros.
 > 	- Then run `wsl -d <DistroName>`.
 > 	- Ubuntu-24.04 is recommended.
 
