@@ -228,7 +228,6 @@ response_json = {
 socket.send_json(response_json, zmq.SNDMORE)
 ```
 
-<br>
 
 ##### Second Message:
 
