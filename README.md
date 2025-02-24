@@ -78,6 +78,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 > - Then run `dos2unix <ScriptName>.sh` and try running the script again.
 
 <br>
+
 #### build_script.sh
 
 - This will first stop and remove any active containers with `$CONTAINER_NAME`. 
