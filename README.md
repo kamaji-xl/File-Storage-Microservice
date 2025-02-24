@@ -37,6 +37,9 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 >[!important] `CONTAINERIZED=True` isn't an actual boolean variable.
 >I have explained further in the `.env` comments. 
 
+>[!warning]
+>If you are planning to host the container online, the default `HOST=0.0.0.0` needs to be changed. 
+
 ### [I don't want to use docker, show me how the API works](#Using-the-Server)
 
 #  Docker
