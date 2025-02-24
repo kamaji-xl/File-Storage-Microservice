@@ -34,8 +34,9 @@ You have a couple of options for running `server.py`.
 
 I recommend using the `Dockerfile`. It comes with the advantage that the storage is ephemeral unless you attach a volume for permanence. Meaning that every time you stop the container whatever files have been uploaded will be erased, and it's really convenient not having to constantly clear out all your test files. The code is preconfigured for docker, however you can easily ignore it by setting `CONTAINERIZED=FALSE` in the `.env` file. 
 
->[!important] `CONTAINERIZED=True` isn't an actual boolean variable.
->I have explained further in the `.env` comments. 
+>[!important] 
+> - `CONTAINERIZED=True` isn't an actual boolean variable.
+> - I have explained further in the `.env` comments. 
 
 ### [I don't want to use docker, show me how the API works](#Using-the-Server)
 
@@ -48,7 +49,8 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 	- If you are on mac or Linux then you can ignore this.  
 
 
-> [!note] If you have already installed docker desktop before WSL. 
+> [!note] 
+> If you have already installed docker desktop before WSL. 
 > - **DO NOT INSTALL WSL WITH** `wsl --install` 
 > - Instead use `wsl --list --verbose` to get a list of available distros.
 > 	- Then run `wsl -d <DistroName>`.Ubuntu-24.04 is reccommended.
@@ -64,7 +66,7 @@ chmod +x build_script.sh
 chmod +x stop_and_remove_container.sh
 ```
 
-So that they are executable and can then each be ran with `./<FileName`.
+So that they are executable and can then each be ran with `./<FileName>`.
 
 #### build_script.sh
 
@@ -86,7 +88,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 
 ## Using the Server
 
-- Requests are received as `JSON`, and passed to `request_handler(request)`. 
+- Requests are received as `JSON`, and passed to `request_handler(request)` as a dictionary called `request_json`. 
 - The handler with then extract `request["command"]` from the request. 
 - The server will then call the corresponding function of the command. 
 	- `upload(request)`
@@ -94,7 +96,80 @@ So that they are executable and can then each be ran with `./<FileName`.
 	- `get_list(request)`
 
 ### upload(request)
+#### upload(request) - Requesting Data
+
+> [!important]
+> - `upload(request)` expects two messages from the socket.
+> - The first message should contain the `request_json`.
+> - The second should be the file **encoded in base64**.
+
+`request_json` structure for `upload(request)`:
+
+```python
+request_json = {  
+    "command": "upload",  
+    "campaign": campaign_name,  
+    "file_name": file_name 
+}
+```
+
+
+Example call to `upload(request)`:
+
+```python
+socket.send_json(request_json, zmq.SNDMORE)  
+socket.send(base64.b64encode(file))
+```
+
+
+#### upload(request) - Receiving Data
+
+`upload(request)` will return one of two messages:
+
+A success message, 
+
+```python
+response_json = {  
+    "Status": "Success",  
+    "Message": f"Downloaded <{file_name}> from <{path}>"  
+}
+```
+
+
+or a failure message.
+
+```python
+response_json = {  
+    "Status": " Failure",  
+    "Message": "File not found."
+}
+```
+
+
+The message can be received with something like:
+
+```python
+response = socket.recv_json()
+```
 
 ### download(request)
 
+`request_json` structure for `download(request)`:
+
+```python
+request_json = {  
+    "command": "download",  
+    "campaign": campaign_name,  
+    "file_name": file_name,  
+}
+```
+
 ### get_list(request)
+
+`request_json` structure for `get_list(request)`:
+```python
+request_json = {  
+    "command": "list",  
+    "campaign": campaign_name 
+}
+```

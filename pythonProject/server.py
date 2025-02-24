@@ -70,12 +70,12 @@ def download(request):
         file_content = f.read()
 
     encoded_data = base64.b64encode(file_content)
-    response_meta = {
+    response_json = {
         "Status": "Success",
         "Message": f"Downloaded <{file_name}> from <{path}>",
     }
 
-    socket.send_json(response_meta, zmq.SNDMORE)
+    socket.send_json(response_json, zmq.SNDMORE)
     socket.send(encoded_data)
     return None
 
