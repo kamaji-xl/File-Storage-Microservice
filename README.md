@@ -113,7 +113,11 @@ So that they are executable and can then each be ran with `./<FileName`.
 	- `get_list(request)`
 
 ### upload(request)
+
+When called will upload a single file to the server, and send a response in `JSON` format.
+
 #### upload(request) - Requesting Data
+
 
 > [!important]
 > - `upload(request)` expects two messages from the socket.
@@ -133,6 +137,7 @@ request_json = {
 ```
 
 <br>
+
 Example call to `upload(request)`:
 
 ```python
@@ -140,12 +145,13 @@ socket.send_json(request_json, zmq.SNDMORE)
 socket.send(base64.b64encode(file))
 ```
 
+<br>
 
 #### upload(request) - Receiving Data
 
 `upload(request)` will return one of two messages:
 
-A success message, 
+**Success Message**:
 
 ```python
 response_json = {  
@@ -154,8 +160,9 @@ response_json = {
 }
 ```
 
+<br>
 
-or a failure message.
+**Failure Message**:
 
 ```python
 response_json = {  
@@ -165,13 +172,21 @@ response_json = {
 ```
 
 
-The message can be received with something like:
+The message can be received by assigning a variable to `socket.recv_json()`.
+
+**Example**:
 
 ```python
 response = socket.recv_json()
 ```
 
+<br>
+
 ### download(request)
+
+When called check to see if the requested file exists. If the file exists it will then send a message in `JSON` format followed by a second message containing the requested file encoded in base64. Otherwise, only one message stating the failure of the operation will be sent.
+
+#### download(request) - Requesting Data
 
 `request_json` structure for `download(request)`:
 
@@ -183,12 +198,79 @@ request_json = {
 }
 ```
 
+##### An example request:
+
+```python
+socket.send_json(request_json)
+```
+
+#### download(request) - Receiving Data
+
+>[!important]
+> `download(request)` sends two messages if the requested file exists.
+> - The first message is the response in `JSON` format.
+> 	- If the file doesn't exist this will be the only message sent.
+> - The second message is the file data **encoded in base64**.
+
+##### If the file exists:
+
+**First Message**:
+
+```python
+response_json = {  
+    "Status": "Success",  
+    "Message": f"Downloading <{file_name}> from <{path}>",  
+}
+
+# response_json is sent with zmq.SNDMORE 
+socket.send_json(response_json, zmq.SNDMORE)
+```
+
+<br>
+
+**Second Message**:
+
+```python
+# File data is encoded in base64
+encoded_data = base64.b64encode(file_content)
+
+# Then sent
+socket.send(encoded_data)
+```
+
+##### If the file doesn't exist:
+
+```python
+response_json = {
+	"Status": " Failure",  
+    "Message": "File not found."
+}
+
+# response_json is sent
+socket.send_json(response)
+```
+
+##### How to receive data example:
+
+```python
+# Receive first message
+response = socket.recv_json()
+
+# If the status is "Success" receive the data
+file_data = socket.recv()
+
+# Then decode the data using base64.b64decode()
+file_data = base64.b64decode(file_data)
+```
+
 ### get_list(request)
 
 `request_json` structure for `get_list(request)`:
+
 ```python
 request_json = {  
     "command": "list",  
     "campaign": campaign_name 
 }
 ```
+
