@@ -34,7 +34,8 @@ You have a couple of options for running `server.py`.
 
 I recommend using the `Dockerfile`. It comes with the advantage that the storage is ephemeral unless you attach a volume for permanence. Meaning that every time you stop the container whatever files have been uploaded will be erased, and it's really convenient not having to constantly clear out all your test files. The code is preconfigured for docker, however you can easily ignore it by setting `CONTAINERIZED=FALSE` in the `.env` file. 
 
->[!important] `CONTAINERIZED=True` isn't an actual boolean variable.
+>[!important] 
+>`CONTAINERIZED=True` isn't an actual boolean variable.
 >I have explained further in the `.env` comments. 
 
 ### [I don't want to use docker, show me how the API works](#Using-the-Server)
@@ -48,7 +49,8 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 	- If you are on mac or Linux then you can ignore this.  
 
 
-> [!note] If you have already installed docker desktop before WSL. 
+> [!note] 
+> If you have already installed docker desktop before WSL. 
 > - **DO NOT INSTALL WSL WITH** `wsl --install` 
 > - Instead use `wsl --list --verbose` to get a list of available distros.
 > 	- Then run `wsl -d <DistroName>`.Ubuntu-24.04 is reccommended.
