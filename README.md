@@ -52,12 +52,17 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 > [!note] 
 > If you have already installed docker desktop before WSL. 
 > - **DO NOT INSTALL WSL WITH** `wsl --install` 
-> - Instead use `wsl --list --verbose` to get a list of available distros.
-> 	- Then run `wsl -d <DistroName>`.Ubuntu-24.04 is reccommended.
+> - Instead, use `wsl --list --verbose` to get a list of available distros.
+> 	- Then run `wsl -d <DistroName>`.
+> 	- Ubuntu-24.04 is recommended.
+
 
 ### Using Docker
 
-I have included a couple of bash scripts, `build_script.sh` and `stop_and_remove_container.sh`.
+- First ensure that docker desktop is running.
+- I have included a couple of bash scripts:
+	- `build_script.sh` 
+	- `stop_and_remove_container.sh`
 
 To use them first run:
 
@@ -65,8 +70,15 @@ To use them first run:
 chmod +x build_script.sh
 chmod +x stop_and_remove_container.sh
 ```
+<br>
+So that they are executable and can then each be ran with `./<FileName`.
 
-So that they are executable and can then each be ran with `./<FileName>`.
+> [!note]
+> If you are using WSL and are getting `-bash: ./<ScriptName>.sh: cannot execute: required file not found`. 
+> - Try installing `dos2unix` with `sudo apt install dos2unix` (on Ubuntu).
+> - Then run `dos2unix <ScriptName>.sh` and try running the script again.
+
+<br>
 
 #### build_script.sh
 
@@ -84,7 +96,12 @@ So that they are executable and can then each be ran with `./<FileName>`.
 - Any container with the matching `$CONTAINER_NAME` will be stopped and removed. 
 
 >[!tip] 
->`docker exec -it file_storage_microservice bash` will open a bash shell inside of the container while it's running. Allowing you to use bash commands. This way commands like `ls` can be used to check that files are uploading correctly.
+>`docker exec -it file_storage_microservice bash` will open a bash shell inside of the container while it's running. 
+>- Allowing you to use bash commands. 
+>- This way commands like `ls` can be used to check that files are uploading correctly.
+>- Logs can also be viewed in docker desktop.
+
+<br>
 
 ## Using the Server
 
@@ -103,6 +120,8 @@ So that they are executable and can then each be ran with `./<FileName>`.
 > - The first message should contain the `request_json`.
 > - The second should be the file **encoded in base64**.
 
+<br>
+
 `request_json` structure for `upload(request)`:
 
 ```python
@@ -113,7 +132,7 @@ request_json = {
 }
 ```
 
-
+<br>
 Example call to `upload(request)`:
 
 ```python
