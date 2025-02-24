@@ -34,15 +34,17 @@ You have a couple of options for running `server.py`.
 
 I recommend using the `Dockerfile`. It comes with the advantage that the storage is ephemeral unless you attach a volume for permanence. Meaning that every time you stop the container whatever files have been uploaded will be erased, and it's really convenient not having to constantly clear out all your test files. The code is preconfigured for docker, however you can easily ignore it by setting `CONTAINERIZED=FALSE` in the `.env` file. 
 
->[!important] 
-> - `CONTAINERIZED=True` isn't an actual boolean variable.
-> - I have explained further in the `.env` comments. 
+>[!important] `CONTAINERIZED=True` isn't an actual boolean variable.
+>I have explained further in the `.env` comments. 
+
+>[!warning]
+>If you are planning to host the container online, the default `HOST=0.0.0.0` needs to be changed. 
 
 ### [I don't want to use docker, show me how the API works](#Using-the-Server)
 
-##  Docker
+#  Docker
 
-### Installation
+## Installation
 
 - Docker can be installed by navigating to [the docker website](https://www.docker.com/products/docker-desktop/), and installing  docker desktop. 
 - If you don't have WSL installed, **install it first**, to save the headache of some trouble shooting later.
@@ -50,14 +52,14 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 
 
 > [!note] 
-> If you have already installed docker desktop before WSL. 
+> If you have already installed docker desktop before WSL: 
 > - **DO NOT INSTALL WSL WITH** `wsl --install` 
-> - Instead, use `wsl --list --verbose` to get a list of available distros.
+> - Instead use `wsl --list --verbose` to get a list of available distros.
 > 	- Then run `wsl -d <DistroName>`.
 > 	- Ubuntu-24.04 is recommended.
 
 
-### Using Docker
+## Using Docker
 
 - First ensure that docker desktop is running.
 - I have included a couple of bash scripts:
@@ -70,7 +72,9 @@ To use them first run:
 chmod +x build_script.sh
 chmod +x stop_and_remove_container.sh
 ```
+
 <br>
+
 So that they are executable and can then each be ran with `./<FileName`.
 
 > [!note]
@@ -80,7 +84,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 
 <br>
 
-#### build_script.sh
+### build_script.sh
 
 - This will first stop and remove any active containers with `$CONTAINER_NAME`. 
 - It will then build and run the container from the `Dockerfile`.
@@ -90,7 +94,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 - At this point the server will be listening on `tcp//:0.0.0.0:5555`.
 	- Requests made by the client on `tcp//:localhost:6000`, will be received by the container and responses will be sent to the client.
 
-#### stop_and_remove_container.sh
+### stop_and_remove_container.sh
 
 - Basically, this is just the first portion of `build_scripts.sh`. 
 - Any container with the matching `$CONTAINER_NAME` will be stopped and removed. 
@@ -103,7 +107,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 
 <br>
 
-## Using the Server
+# Using the Server
 
 - Requests are received as `JSON`, and passed to `request_handler(request)` as a dictionary called `request_json`. 
 - The handler with then extract `request["command"]` from the request. 
@@ -116,7 +120,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 
 When called will upload a single file to the server, and send a response in `JSON` format.
 
-#### upload(request) - Requesting Data
+### upload(request) - Requesting Data
 
 
 > [!important]
@@ -147,7 +151,7 @@ socket.send(base64.b64encode(file))
 
 <br>
 
-#### upload(request) - Receiving Data
+### upload(request) - Receiving Data
 
 `upload(request)` will return one of two messages:
 
@@ -174,6 +178,8 @@ response_json = {
 
 The message can be received by assigning a variable to `socket.recv_json()`.
 
+<br>
+
 **Example**:
 
 ```python
@@ -182,11 +188,11 @@ response = socket.recv_json()
 
 <br>
 
-### download(request)
+## download(request)
 
 When called check to see if the requested file exists. If the file exists it will then send a message in `JSON` format followed by a second message containing the requested file encoded in base64. Otherwise, only one message stating the failure of the operation will be sent.
 
-#### download(request) - Requesting Data
+### download(request) - Requesting Data
 
 `request_json` structure for `download(request)`:
 
@@ -198,13 +204,13 @@ request_json = {
 }
 ```
 
-##### An example request:
+#### An example request:
 
 ```python
 socket.send_json(request_json)
 ```
 
-#### download(request) - Receiving Data
+### download(request) - Receiving Data
 
 >[!important]
 > `download(request)` sends two messages if the requested file exists.
@@ -212,9 +218,9 @@ socket.send_json(request_json)
 > 	- If the file doesn't exist this will be the only message sent.
 > - The second message is the file data **encoded in base64**.
 
-##### If the file exists:
+### If the file exists:
 
-**First Message**:
+#### First Message:
 
 ```python
 response_json = {  
@@ -226,9 +232,8 @@ response_json = {
 socket.send_json(response_json, zmq.SNDMORE)
 ```
 
-<br>
 
-**Second Message**:
+#### Second Message:
 
 ```python
 # File data is encoded in base64
@@ -238,7 +243,7 @@ encoded_data = base64.b64encode(file_content)
 socket.send(encoded_data)
 ```
 
-##### If the file doesn't exist:
+### If the file doesn't exist:
 
 ```python
 response_json = {
@@ -250,7 +255,7 @@ response_json = {
 socket.send_json(response)
 ```
 
-##### How to receive data example:
+### Receiving data example:
 
 ```python
 # Receive first message
@@ -263,7 +268,11 @@ file_data = socket.recv()
 file_data = base64.b64decode(file_data)
 ```
 
-### get_list(request)
+## get_list(request)
+
+When called will return a message formatted as `JSON` and containing a list of a directories contents.
+
+### get_list(request) - Requesting Data
 
 `request_json` structure for `get_list(request)`:
 
@@ -273,4 +282,53 @@ request_json = {
     "campaign": campaign_name 
 }
 ```
+
+#### An example request:
+
+```python
+socket.send_json(request_json)
+```
+
+>[!tip]
+>If `campaign_name == ''`  it will return a list of all the available campaigns in the `\uploads` directory.
+
+### get_list(request) - Receiving Data
+
+`get_list(request)` will send one of two possible messages:
+
+#### If the chosen campaign exists:
+
+```python
+response_json = {
+	"Status": "Success",  
+	"Files": files,  
+	"Message": f"Found <{len(files)}> file(s) in <{campaign_name}>."
+}
+```
+
+#### If the chosen campaign doesn't exist:
+
+```python
+response_json = {
+	"Status": "Failure",  
+	"Message": f"The directory <{campaign_name}> does not exist."
+}
+```
+
+#### Receiving data example:
+
+```python
+response_json = socket.recv_json()
+
+# The list of files will be response_json["Files"]
+```
+
+
+# UML Sequence Diagram
+
+![UML Sequence Diagram](pythonProject/images/UML.png)
+
+
+
+
 
