@@ -116,7 +116,6 @@ So that they are executable and can then each be ran with `./<FileName`.
 
 When called will upload a single file to the server, and send a response in `JSON` format.
 
-
 #### upload(request) - Requesting Data
 
 
@@ -175,6 +174,8 @@ response_json = {
 
 The message can be received by assigning a variable to `socket.recv_json()`.
 
+<br>
+
 **Example**:
 
 ```python
@@ -213,7 +214,7 @@ socket.send_json(request_json)
 > 	- If the file doesn't exist this will be the only message sent.
 > - The second message is the file data **encoded in base64**.
 
-##### If the file exists:
+#### If the file exists:
 
 **First Message**:
 
@@ -239,7 +240,7 @@ encoded_data = base64.b64encode(file_content)
 socket.send(encoded_data)
 ```
 
-##### If the file doesn't exist:
+#### If the file doesn't exist:
 
 ```python
 response_json = {
@@ -251,7 +252,7 @@ response_json = {
 socket.send_json(response)
 ```
 
-##### How to receive data example:
+#### Receiving data example:
 
 ```python
 # Receive first message
@@ -274,4 +275,6 @@ request_json = {
     "campaign": campaign_name 
 }
 ```
+
+
 
