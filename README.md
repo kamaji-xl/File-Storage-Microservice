@@ -41,7 +41,7 @@ I recommend using the `Dockerfile`. It comes with the advantage that the storage
 >[!warning]
 >If you are planning to host the container online, the default `HOST=0.0.0.0` needs to be changed. 
 
-### [I don't want to use docker, show me how the API works](#Using-the-Server)
+### [Click here if you don't want to use docker, and just want to see how the API works](#Using-the-Server)
 
 #  Docker
 
