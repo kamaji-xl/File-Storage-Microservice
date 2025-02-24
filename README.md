@@ -216,7 +216,7 @@ socket.send_json(request_json)
 
 #### If the file exists:
 
-**First Message**:
+##### First Message:
 
 ```python
 response_json = {  
@@ -230,7 +230,7 @@ socket.send_json(response_json, zmq.SNDMORE)
 
 <br>
 
-**Second Message**:
+##### Second Message:
 
 ```python
 # File data is encoded in base64
