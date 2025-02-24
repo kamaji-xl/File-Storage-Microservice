@@ -275,5 +275,11 @@ request_json = {
 }
 ```
 
+# UML Sequence Diagram
+
+![UML Sequence Diagram](images/UML.png)
+
+
+
 
 
