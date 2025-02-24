@@ -1,4 +1,3 @@
-# Thank you for checking out the File-Storage-Microservice
 # Getting Started
 ## Dependencies
 
