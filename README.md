@@ -277,7 +277,7 @@ request_json = {
 
 # UML Sequence Diagram
 
-![UML Sequence Diagram](images/UML.png)
+![UML Sequence Diagram](pythonProject/images/UML.png)
 
 
 
