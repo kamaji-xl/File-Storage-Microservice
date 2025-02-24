@@ -118,6 +118,8 @@ When called will upload a single file to the server, and send a response in `JSO
 
 #### upload(request) - Requesting Data
 
+<br>
+
 
 > [!important]
 > - `upload(request)` expects two messages from the socket.
