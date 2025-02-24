@@ -116,9 +116,9 @@ So that they are executable and can then each be ran with `./<FileName`.
 
 When called will upload a single file to the server, and send a response in `JSON` format.
 
-#### upload(request) - Requesting Data
-
 <br>
+
+#### upload(request) - Requesting Data
 
 
 > [!important]
