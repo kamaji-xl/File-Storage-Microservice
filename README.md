@@ -100,6 +100,7 @@ So that they are executable and can then each be ran with `./<FileName`.
 >- Logs can also be viewed in docker desktop.
 
 <br>
+
 ## Using the Server
 
 - Requests are received as `JSON`, and passed to `request_handler(request)` as a dictionary called `request_json`. 
