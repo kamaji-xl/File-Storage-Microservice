@@ -34,13 +34,14 @@ You have a couple of options for running `server.py`.
 
 I recommend using the `Dockerfile`. It comes with the advantage that the storage is ephemeral unless you attach a volume for permanence. Meaning that every time you stop the container whatever files have been uploaded will be erased, and it's really convenient not having to constantly clear out all your test files. The code is preconfigured for docker, however you can easily ignore it by setting `CONTAINERIZED=FALSE` in the `.env` file. 
 
->[!important] `CONTAINERIZED=True` isn't an actual boolean variable.
+>[!important] 
+> `CONTAINERIZED=True` isn't an actual boolean variable.
 >I have explained further in the `.env` comments. 
 
 >[!warning]
 >If you are planning to host the container online, the default `HOST=0.0.0.0` needs to be changed. 
 
-### [I don't want to use docker, show me how the API works](#Using-the-Server)
+### [Click here if you don't want to use docker, and just want to see how the API works](#Using-the-Server)
 
 #  Docker
 
