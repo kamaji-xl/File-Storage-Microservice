@@ -244,7 +244,7 @@ socket.send(encoded_data)
 
 ```python
 response_json = {
-	"Status": " Failure",  
+    "Status": " Failure",  
     "Message": "File not found."
 }
 
