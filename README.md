@@ -88,7 +88,7 @@ So that they are executable and can then each be ran with `./<FileName>`.
 
 ## Using the Server
 
-- Requests are received as `JSON`, and passed to `request_handler(request)`. 
+- Requests are received as `JSON`, and passed to `request_handler(request)` as a dictionary called `request_json`. 
 - The handler with then extract `request["command"]` from the request. 
 - The server will then call the corresponding function of the command. 
 	- `upload(request)`
@@ -96,7 +96,80 @@ So that they are executable and can then each be ran with `./<FileName>`.
 	- `get_list(request)`
 
 ### upload(request)
+#### upload(request) - Requesting Data
+
+> [!important]
+> - `upload(request)` expects two messages from the socket.
+> - The first message should contain the `request_json`.
+> - The second should be the file **encoded in base64**.
+
+`request_json` structure for `upload(request)`:
+
+```python
+request_json = {  
+    "command": "upload",  
+    "campaign": campaign_name,  
+    "file_name": file_name 
+}
+```
+
+
+Example call to `upload(request)`:
+
+```python
+socket.send_json(request_json, zmq.SNDMORE)  
+socket.send(base64.b64encode(file))
+```
+
+
+#### upload(request) - Receiving Data
+
+`upload(request)` will return one of two messages:
+
+A success message, 
+
+```python
+response_json = {  
+    "Status": "Success",  
+    "Message": f"Downloaded <{file_name}> from <{path}>"  
+}
+```
+
+
+or a failure message.
+
+```python
+response_json = {  
+    "Status": " Failure",  
+    "Message": "File not found."
+}
+```
+
+
+The message can be received with something like:
+
+```python
+response = socket.recv_json()
+```
 
 ### download(request)
 
+`request_json` structure for `download(request)`:
+
+```python
+request_json = {  
+    "command": "download",  
+    "campaign": campaign_name,  
+    "file_name": file_name,  
+}
+```
+
 ### get_list(request)
+
+`request_json` structure for `get_list(request)`:
+```python
+request_json = {  
+    "command": "list",  
+    "campaign": campaign_name 
+}
+```
