@@ -102,7 +102,7 @@ def get_list(request):
 def request_handler(request):
     print("Request received:")
     for key in request.keys():
-        print(f"{key}: {request[key]}")
+        print(f"\t{key}: {request[key]}")
     command = request.get("command")
     if command == "upload":
         return upload(request)

@@ -86,7 +86,9 @@ def upload(campaign, file_path):
         "file_name": file_path.split("/")[-1]
     }
 
+    print(f"\nSending request: {request_json}")
     socket.send_json(request_json, zmq.SNDMORE)
+    print(f"Sending file: {request_json['file_name']}")
     socket.send(base64.b64encode(data))
     response = socket.recv_json()
     print_response(response)
@@ -98,6 +100,7 @@ def download(campaign, file_name):
         "campaign": campaign,
         "file_name": file_name,
     }
+    print(f"\nSending request: {request_json}")
     socket.send_json(request_json)
 
     response = socket.recv_json()
@@ -124,6 +127,7 @@ def list_files(campaign='uploads'):
         "command": "list",
         "campaign": campaign
     }
+    print(f"\nSending request: {request_json}")
     socket.send_json(request_json)
 
     response_json = socket.recv_json()
@@ -154,6 +158,7 @@ if __name__ == "__main__":
         option = input(f"Type your selection and press <{GREEN}Enter{RESET}>:{YELLOW}\n=>{RESET} ")
 
         if option == "1":  # Upload File
+            list_files('')
             campaign = (input("Enter a campaign name: "))
             upload(campaign, selector())
 
