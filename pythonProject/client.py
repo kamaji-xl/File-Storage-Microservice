@@ -46,8 +46,12 @@ def list_parser(categories, key):
         print(f"{key}:   {CYAN}{categories}{RESET}")
     elif categories is not None and len(categories) > 0:
         print(f"{key}:   {CYAN}{categories[0]}{RESET}")
-        for i in range(1, len(categories)):
-            print(f"\t\t\t {CYAN}{categories[i]}{RESET}")
+        if key == FILES:
+            for i in range(1, len(categories)):
+                print(f"\t\t {CYAN}{categories[i]}{RESET}")
+        else:
+            for i in range(1, len(categories)):
+                print(f"\t\t\t {CYAN}{categories[i]}{RESET}")
 
 
 def print_response(response):
@@ -67,7 +71,7 @@ def print_response(response):
     msg = msg.replace("\\.", ".")
     msg = msg.replace("\\ ", " ")
 
-    print(f"Status:  {status}")
+    print(f"\nStatus:  {status}")
     print(f"Message: {msg}")
     list_parser(files, FILES)
 
@@ -171,7 +175,9 @@ if __name__ == "__main__":
 
         elif option == "3":  # Get list of assets in campaign directory
             list_files('')
-            campaign_name = input(f"\nPlease type the name of the campaign directory you would like to ")
+            campaign_name = input(f"\nPlease type the name of the campaign directory you would like to view.\n"
+                                  f"{YELLOW}=>{RESET} ")
+            list_files(campaign_name)
         elif option == "4":
             print(f'\n{YELLOW}=========================================')
             print('[Thank you for using TTRPG Asset Server!]')
