@@ -76,7 +76,7 @@ chmod +x stop_and_remove_container.sh
 
 <br>
 
-So that they are executable and can then each be ran with `./<FileName`.
+So that they are executable and can then each be ran with `./<FileName>`.
 
 > [!note]
 > If you are using WSL and are getting `-bash: ./<ScriptName>.sh: cannot execute: required file not found`. 
